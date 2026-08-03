@@ -1,0 +1,27 @@
+{
+  "name": "wvit",
+  "version": "1.0.0",
+  "description": "Watch Vitals",
+  "homepage": "https://github.com/clampro/wvit#readme",
+  "bugs": {
+    "url": "https://github.com/clampro/wvit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clampro/wvit.git"
+  },
+  "license": "ISC",
+  "author": "Costas Lampropoulos",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  }
+}

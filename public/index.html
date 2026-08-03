@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.bunny.net/css?family=Roboto">
+    <link rel="stylesheet" href="style.css">
+    <script src="/config.js"></script>
+    <script src="scripts/index.js" defer></script>
+    <title>Document</title>
+</head>
+<body onload="init()">
+    <h1>Νέα Μέτρηση</h1>
+
+    <div id="newMeasure" class="newMeasure">
+        <button type="submit" id="pressureBTN" class="measureBTN">
+            <img src="assets/pressure-white.png" alt="Blood pressure">
+        </button>
+        <button type="submit" id="glucoseBTN" class="measureBTN">
+            <img src="assets/glucose-white.png" alt="Glucose">
+        </button>
+    </div>
+    <br>
+    <hr>
+
+    <h1>Τελευταίες Μετρήσεις</h1>
+
+    <br>
+
+    <h2>Πίεση</h2>
+    
+    <div class="tableDiv">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ημερομηνία</th>
+                    <th>Ώρα</th>
+                    <th>Μεγάλη</th>
+                    <th>Μικρή</th>
+                    <th>Παλμοί</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-07-25</td>
+                    <td>16:00:00</td>
+                    <td>110</td>
+                    <td>78</td>
+                    <td>75</td>
+                </tr>
+                <tr>
+                    <td>2026-07-24</td>
+                    <td>17:00:00</td>
+                    <td>112</td>
+                    <td>79</td>
+                    <td>87</td>
+                </tr> 
+                <tr>
+                    <td>2026-07-23</td>
+                    <td>17:12:00</td>
+                    <td>110</td>
+                    <td>75</td>
+                    <td>81</td>
+                </tr>                            
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Ζάχαρο</h2>
+    
+    <div class="tableDiv">
+        <table>
+            <thead>
+                <tr>
+                    <th>Ημερομηνία</th>
+                    <th>Ώρα</th>
+                    <th>Γλυκόζη</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-07-25</td>
+                    <td>16:00:00</td>
+                    <td>120</td>
+                </tr>
+                <tr>
+                    <td>2026-07-24</td>
+                    <td>18:00:00</td>
+                    <td>86</td>
+                </tr>            
+                <tr>
+                    <td>2026-07-23</td>
+                    <td>19:00:00</td>
+                    <td>88</td>
+                </tr>                            
+            </tbody>
+        </table>
+    </div>
+    
+    <br>
+    <hr>
+    <div class="statusMsg" id="statusMsg">
+        <p class="statusTXT" id="statusTXT">.</p>
+    </div>
+    <hr>
+
+    <!---Modal Window for Blood Pressure Reading-->
+    <div class="modal-bp" id="modal-bp">
+        <div class="modal-bp-content">
+            <div class="modal-bp-header">
+                <h2>Νέα Μέτρηση Πίεσης</h2>
+                <span class="closeBP">&times;</span>
+            </div>
+            <div class="modal-bp-body">
+                <div class="bpDate">
+                    <label for="newBPDate">Ημερομηνία</label>
+                    <input type="date" value="2026-07-31" id="newBPDate" class="input" name="newBPDate">
+                    <label for="newBPTime">Ώρα</label>
+                    <input type="time" value="09:00" id="newBPTime" class="input" name="newBPTime">
+                </div>
+                <div class="bpReadings">
+                    <label for="systolic">Μεγάλη</label>
+                    <input type="number" id="systolic" class="input" name="systolic" min="10" max="200">
+                    <label for="diastolic">Μικρή</label>
+                    <input type="number" id="diastolic" class="input" name="diastolic" min="10" max="200">
+                    <label for="pulses">Παλμοί</label>
+                    <input type="number" id="pulses" class="input" name="pulses" min="0" max="300">
+                    <label for="notesGL">Σημειώσεις</label>
+                    <textarea name="notesBP" id="notesBP" class="input"></textarea>
+                </div>
+            </div>
+            <div class="modal-bp-footer">
+                <button class="addNew" id="BPaddNew">Προσθήκη</button>
+            </div>
+        </div>
+    </div>
+    
+    <!---Modal Window for Glucose Reading-->
+    <div class="modal-gl" id="modal-gl"> 
+        <div class="modal-gl-content">
+            <div class="modal-gl-header">
+                <h2>Νέα Μέτρηση Ζαχάρου</h2>
+                <span class="closeGL">&times;</span>
+            </div>
+            <div class="modal-gl-body">
+                <div class="glDate">
+                    <label for="newGLDate">Ημερομηνία</label>
+                    <input type="date" id="newGLDate" class="input" name="newGLDate">
+                    <label for="newGLTime">Ώρα</label>
+                    <input type="time" id="newGLTime" class="input" name="newGLTime">
+                </div>
+                <div class="glReadings">
+                    <label for="glucose">Γλυκόζη</label>
+                    <input type="number" id="glucose" class="input" name="glucose" min="10" max="300">
+                    <label for="notesGL">Σημειώσεις</label>
+                    <textarea name="notesGL" id="notesGL" class="input"></textarea>
+                </div>
+            </div>
+            <div class="modal-bp-footer">
+                <button class="addNew" id="GLaddNew">Προσθήκη</button>
+            </div>
+        </div>           
+    </div>
+    
+    <footer>
+        <div id="measureHist" class="measureHist">
+            <button type="submit" id="pressure" class="measureBTN">
+                <img src="assets/pressure-hist.png" alt="Blood pressure">
+            </button>
+            <button type="submit" id="glucose" class="measureBTN">
+             <img src="assets/glucose-hist.png" alt="Glucose">
+            </button>
+        </div>        
+    </footer>
+</body>
+</html>

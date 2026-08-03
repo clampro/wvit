@@ -1,0 +1,189 @@
+html{
+    /* Color palette derived from: https://www.color-hex.com/color-palette/19223 */
+    --page-background: #FFFFFF;
+    --section-background: #CEF9EA;
+    --main-text: #002C36;
+    --secondary-text: #004E54;
+    --primary-button: #004E54;
+    --button-hover: #003B40;
+    --secondary-button: #6CCEA4;
+    --dividers: #DDF6EE;
+    --modal-background: #aeb4b2;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    background: var(--page-background);
+    color: var(--main-text);
+}
+
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+  border-color: var(--dividers);
+  width: 75vw;    
+}
+
+.newMeasure {
+    display: flex;
+    padding: 50px;
+    align-items: center;
+    gap: 25px;
+    justify-content: center;
+}
+
+.measureHist {
+    display: flex;
+    padding: 50px;
+    align-items: center;
+    gap: 25px;
+    justify-content: center;
+}
+
+.measureBTN {
+    width: 80vmax;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    background-color: var(--primary-button);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.measureBTN img {
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+}
+
+.measureBTN:hover {
+    background-color: var(--button-hover);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  background-color: var(--primary-button);
+  color: var(--page-background);
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  text-align: left;
+}
+tr:nth-child(even) {
+  background-color: var(--dividers);
+}
+
+.statusTXT{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: italic;
+  transition: opacity 3s;
+}
+
+.modal-bp, .modal-gl{
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  justify-content: center;
+  align-items: center;  
+}
+
+.modal-bp-content, .modal-gl-content{
+  background-color: var(--page-background);
+  border-radius: 12px;
+  overflow: hidden; 
+  width: 80vw;
+  max-width: 600px;
+  height: auto;
+}
+
+.modal-bp-header, .modal-gl-header{
+  display: flex;
+  flex-direction: row;
+  background-color: var(--primary-button);
+  color: var(--page-background);
+  padding: 20px;
+  justify-content: space-between;
+}
+
+/* The Close Button */
+.closeBP, .closeGL {
+  color: var(--page-background);
+  float: right;
+  font-size: 42px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.input{
+  padding: 10px;
+  border-radius: 10px;
+  border-color: var(--primary-button);
+  font-size: large;
+}
+
+.input:hover{
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.90);
+}
+
+.input:focus{
+  outline: none;
+  border-color: var(--secondary-button);
+}
+
+.modal-bp-footer, .modal-gl-footer{
+  display: flex;
+  justify-content : center;
+  padding: 12px;
+}
+
+.bpDate, .glDate{
+  padding: 30px;
+  gap: 12px; 
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  font-size: large;
+}
+
+.bpReadings, .glReadings{
+  display: grid;
+  grid-template-columns: 4fr 6fr;
+  padding: 30px;
+  gap: 12px;
+  font-size: large;
+}
+
+.addNew{
+  width: 25vw;
+  height: 40px;
+  color: var(--page-background);
+  font-size: large;
+  background-color: var(--primary-button);
+  border-radius: 8px;
+  cursor: pointer; 
+}
+
+.addNew:hover{
+  background-color: var(--button-hover);
+}   
