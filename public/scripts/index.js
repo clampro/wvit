@@ -100,6 +100,8 @@ function addNewMeasurement(modal){
     const validationsOK = validate_input(modal);
     
     if(validationsOK){
+        
+
         //close window and display message
         statusText.innerHTML = '';
         statusText.style.opacity = '1';
@@ -183,4 +185,115 @@ modalGlOverlay.addEventListener('click', (event)=>{
     const statusText = document.getElementById("statusTXT");
     statusText.style.opacity = '0';
     statusText.innerHTML = "Συνέχισε την καλή δουλειά!"
- }
+ };
+
+ async function fetch_latest_measurements(){
+    
+    const latestBPUrl = `/measurements?limit=3&type=bloodpressure`;
+    const latestGLUrl = `/measurements?limit=3&type=glucose`;
+
+    const responseBP = await fetch(latestBPUrl);
+    const latestBP = await responseBP.json();
+
+    const responseGL = await fetch(latestGLUrl);
+    const latestGL = await responseGL.json();
+
+    render_latest_tables(latestBP, latestGL);
+ };
+
+ function render_latest_tables(measurementsBP, measurementsGL){ 
+
+    const bpTable = document.getElementById("lbpTable");
+    const glTable = document.getElementById("lglTable");
+
+    bpTable.innerHTML = "";
+
+    for(let i=0;i<measurementsBP.length;i++){
+        let measurement = measurementsBP[i];
+
+        let bpDate = measurement.measured_at.split(" ");
+
+        const tr = document.createElement("tr");
+        const tds = document.createElement("td");
+        tds.innerHTML = measurement.systolic;
+        tr.appendChild(tds);
+
+        const tdd = document.createElement("td");
+        tdd.innerHTML = measurement.diastolic;
+        tr.appendChild(tdd);
+
+        const tdp = document.createElement("td");
+        tdp.innerHTML = measurement.pulses;
+        tr.appendChild(tdp);
+
+        const tddtp = document.createElement("td");
+        tddtp.innerHTML = bpDate[0];
+        tr.appendChild(tddtp);
+
+        const tdtmp = document.createElement("td");
+        tdtmp.innerHTML = bpDate[1];
+        tr.appendChild(tdtmp);
+    }
+    
+    if(measurementsBP.length < 3){
+      for(let i=0;i<3- measurementsBP.length;i++){
+            const tr = document.createElement("tr");
+            const tds = document.createElement("td");
+            tds.innerHTML = "-";
+            tr.appendChild(tds);
+
+            const tdd = document.createElement("td");
+            tdd.innerHTML = "-";
+            tr.appendChild(tdd);
+
+            const tdp = document.createElement("td");
+            tdp.innerHTML = "-";
+            tr.appendChild(tdp);
+
+            const tddtp = document.createElement("td");
+            tddtp.innerHTML = "-";
+            tr.appendChild(tddtp);
+
+            const tdtmp = document.createElement("td");
+            tdtmp.innerHTML = "-";
+            tr.appendChild(tdtmp);
+        }  
+    }  
+
+    for(let i=0;i<measurementsGL.length;i++){
+        let measurement = measurementsGL[i];
+
+        let bpDate = measurement.measured_at.split(" ");
+
+        const tr = document.createElement("tr");
+        const tdg = document.createElement("td");
+        tdg.innerHTML = measurement.glucose;
+        tr.appendChild(tdg);
+
+        const tddtp = document.createElement("td");
+        tddtp.innerHTML = bpDate[0];
+        tr.appendChild(tddtp);
+
+        const tdtmp = document.createElement("td");
+        tdtmp.innerHTML = bpDate[1];
+        tr.appendChild(tdtmp);
+    }
+    
+    if(measurementsBP.length < 3){
+      for(let i=0;i<3- measurementsGL.length;i++){
+            const tr = document.createElement("tr");
+            const tdg = document.createElement("td");
+            tdg.innerHTML = "-";
+            tr.appendChild(tdg);
+
+            const tddtp = document.createElement("td");
+            tddtp.innerHTML = "-";
+            tr.appendChild(tddtp);
+
+            const tdtmp = document.createElement("td");
+            tdtmp.innerHTML = "-";
+            tr.appendChild(tdtmp);
+        }  
+    }      
+
+ };
