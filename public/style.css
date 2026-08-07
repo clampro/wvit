@@ -84,6 +84,28 @@ tr:nth-child(even) {
   background-color: var(--dividers);
 }
 
+.notes, .noteshd{
+  text-align: center;
+}
+
+.note-tooltip { 
+    position: absolute;
+    display: none;
+    max-width: 300px;
+    padding: 8px;
+    background: var(--secondary-text);
+    color: var(--page-background);
+    border-radius: 4px;
+    white-space: pre-wrap;
+    z-index: 1000;
+}
+
+.note-button{
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 .statusTXT{
   display: flex;
   align-items: center;
@@ -132,6 +154,13 @@ tr:nth-child(even) {
   font-size: 42px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.glTypes{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
 }
 
 .input{

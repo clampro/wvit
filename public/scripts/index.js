@@ -7,12 +7,14 @@ const { max_systolic, max_diastolic, max_pulses, max_glucose } = window.APP_CONF
 
 let modalOpen;
 
-const openNewBP = document.getElementById("pressureBTN");
-const openNewGL = document.getElementById("glucoseBTN");
+const openNewBP   = document.getElementById("pressureBTN");
+const openNewGL   = document.getElementById("glucoseBTN");
+const historyBP   = document.getElementById("pressureHistBTN");
+const historyGL   = document.getElementById("glucoseHistBTN");
 const BPaddNewBTN = document.getElementById("BPaddNew");
 const GLaddNewBTN = document.getElementById("GLaddNew");
-const spanBP = document.getElementsByClassName("closeBP")[0];
-const spanGL = document.getElementsByClassName("closeGL")[0];
+const spanBP      = document.getElementsByClassName("closeBP")[0];
+const spanGL      = document.getElementsByClassName("closeGL")[0];
 
 const modalBpOverlay = document.getElementById("modal-bp");
 const modalGlOverlay = document.getElementById("modal-gl");
@@ -87,25 +89,80 @@ function closeModalWindow(modalWindow, msg){
     }
 };
 
+//Show modal windows
 openNewBP.addEventListener("click", () => showModalWindow(modals.BP));
 openNewGL.addEventListener("click", () => showModalWindow(modals.GL));
+//Register new Measurement
 BPaddNewBTN.addEventListener("click", () => addNewMeasurement(modals.BP));
 GLaddNewBTN.addEventListener("click", () => addNewMeasurement(modals.GL));
+//Show History
+historyBP.addEventListener("click", ()=> show_history(modals.BP));
+historyGL.addEventListener("click", ()=> show_history(modals.GL));
 
 
 //Add New Measurement to Database
-function addNewMeasurement(modal){
+async function addNewMeasurement(modal){
+    let requestBody;
+    let statusMSG;
+    
     const statusText = document.getElementById("statusTXT");
     
     const validationsOK = validate_input(modal);
     
     if(validationsOK){
         
+        const insertURL = `/insert?type=${modal}`;
+        
+        switch(modal){
+            case modals.BP:
+                requestBody = {
+                    measured_at : `${document.getElementById("newBPDate").value} ${document.getElementById("newBPTime").value}`,  
+                    systolic    : parseInt(document.getElementById("systolic").value),
+                    diastolic   : parseInt(document.getElementById("diastolic").value),
+                    pulses      : parseInt(document.getElementById("pulses").value),
+                    notes       : document.getElementById("notesBP").value
+                };
 
-        //close window and display message
-        statusText.innerHTML = '';
-        statusText.style.opacity = '1';
-        closeModalWindow(modal, "Η μέτρηση προστέθηκε επιτυχώς");
+                break;
+
+            case modals.GL:
+
+                const fastingRB = document.getElementById("fasting");
+                
+                requestBody = {
+                    measured_at : `${document.getElementById("newGLDate").value} ${document.getElementById("newGLTime").value}`,
+                    type        : fastingRB.checked ? "Νηστείας" : "Μεταγευματική",
+                    glucose     : parseInt(document.getElementById("glucose").value),
+                    notes       : document.getElementById("notesGL").value
+                };                
+                break;
+        }
+
+        try{
+
+            const options = {
+                  method: 'POST',
+                  body: JSON.stringify(requestBody),
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'application/json',
+                  }
+            }; 
+
+            const response = await fetch(insertURL, options);
+            statusMSG = response.status == 200 ? "Η μέτρηση προστέθηκε επιτυχώς" : "Λάθος κατά την προσθήκη μέτρησης!";
+
+            //update measurements tables
+            fetch_latest_measurements();
+
+            //close window and display message
+            statusText.innerHTML = '';
+            statusText.style.opacity = '1';
+            closeModalWindow(modal, statusMSG);
+
+        }catch(err){
+            console.error(err);
+        }
     }
 };
 
@@ -119,7 +176,6 @@ function validate_input(modal){
             systolicReading.style.borderColor = "red";
             wrongValueFound = true;
         }else{
-            console.log(systolicReading.value);
             if(systolicReading.value > max_systolic){
                 systolicReading.style.color = "red";
                 wrongValueFound = true;
@@ -185,6 +241,8 @@ modalGlOverlay.addEventListener('click', (event)=>{
     const statusText = document.getElementById("statusTXT");
     statusText.style.opacity = '0';
     statusText.innerHTML = "Συνέχισε την καλή δουλειά!"
+
+    fetch_latest_measurements();
  };
 
  async function fetch_latest_measurements(){
@@ -207,13 +265,26 @@ modalGlOverlay.addEventListener('click', (event)=>{
     const glTable = document.getElementById("lglTable");
 
     bpTable.innerHTML = "";
+    glTable.innerHTML = "";
 
     for(let i=0;i<measurementsBP.length;i++){
         let measurement = measurementsBP[i];
 
-        let bpDate = measurement.measured_at.split(" ");
+        const notesExist = measurement.notes.length > 0 ? true : false;
 
+        let bpDate = measurement.measured_at.split(" ");
         const tr = document.createElement("tr");
+
+
+        const tddtp = document.createElement("td");
+        tddtp.innerHTML = bpDate[0];
+        tr.appendChild(tddtp);
+
+
+        const tdtmp = document.createElement("td");
+        tdtmp.innerHTML = bpDate[1];
+        tr.appendChild(tdtmp);
+
         const tds = document.createElement("td");
         tds.innerHTML = measurement.systolic;
         tr.appendChild(tds);
@@ -226,17 +297,29 @@ modalGlOverlay.addEventListener('click', (event)=>{
         tdp.innerHTML = measurement.pulses;
         tr.appendChild(tdp);
 
-        const tddtp = document.createElement("td");
-        tddtp.innerHTML = bpDate[0];
-        tr.appendChild(tddtp);
+        const tdnp = document.createElement("td");
+        tdnp.className = "notes";
+        if(notesExist){
+            const button = document.createElement("button");
+            button.className = "note-button";
+            button.dataset.note = measurement.notes;
 
-        const tdtmp = document.createElement("td");
-        tdtmp.innerHTML = bpDate[1];
-        tr.appendChild(tdtmp);
+            const img = document.createElement("img");
+            img.src = "assets/notes-green.png";
+            img.alt = "Notes Exist";
+            img.width = "16";
+            img.id = `notes-${measurement.id}`;
+            button.appendChild(img);
+            tdnp.appendChild(button);
+        }
+
+        tr.appendChild(tdnp);
+
+        bpTable.appendChild(tr);
     }
     
     if(measurementsBP.length < 3){
-      for(let i=0;i<3- measurementsBP.length;i++){
+        for(let i=0;i<3- measurementsBP.length;i++){
             const tr = document.createElement("tr");
             const tds = document.createElement("td");
             tds.innerHTML = "-";
@@ -257,18 +340,24 @@ modalGlOverlay.addEventListener('click', (event)=>{
             const tdtmp = document.createElement("td");
             tdtmp.innerHTML = "-";
             tr.appendChild(tdtmp);
+
+            const tdnp = document.createElement("td");
+            tdnp.className = "notes";
+            tdnp.innerHTML = "-";
+            tr.appendChild(tdnp);
+
+            bpTable.appendChild(tr);
         }  
     }  
-
+    
     for(let i=0;i<measurementsGL.length;i++){
         let measurement = measurementsGL[i];
+
+        const notesExist = measurement.notes.length > 0 ? true : false;
 
         let bpDate = measurement.measured_at.split(" ");
 
         const tr = document.createElement("tr");
-        const tdg = document.createElement("td");
-        tdg.innerHTML = measurement.glucose;
-        tr.appendChild(tdg);
 
         const tddtp = document.createElement("td");
         tddtp.innerHTML = bpDate[0];
@@ -277,9 +366,36 @@ modalGlOverlay.addEventListener('click', (event)=>{
         const tdtmp = document.createElement("td");
         tdtmp.innerHTML = bpDate[1];
         tr.appendChild(tdtmp);
+
+        const tdtg = document.createElement("td");
+        tdtg.innerHTML = measurement.type;
+        tr.appendChild(tdtg);
+
+        const tdg = document.createElement("td");
+        tdg.innerHTML = measurement.glucose;
+        tr.appendChild(tdg);        
+
+        const tdng = document.createElement("td");
+        tdng.className = "notes";
+        if(notesExist){
+            const button = document.createElement("button");
+            button.className = "note-button";
+            button.dataset.note = measurement.notes;
+
+            const img = document.createElement("img");
+            img.src = "assets/notes-green.png";
+            img.alt = "Notes Exist";
+            img.width = "16";
+            img.id = `notes-${measurement.id}`;
+            button.appendChild(img);
+            tdng.appendChild(button);
+        }
+        tr.appendChild(tdng);
+
+        glTable.appendChild(tr);
     }
     
-    if(measurementsBP.length < 3){
+    if(measurementsGL.length < 3){
       for(let i=0;i<3- measurementsGL.length;i++){
             const tr = document.createElement("tr");
             const tdg = document.createElement("td");
@@ -290,10 +406,44 @@ modalGlOverlay.addEventListener('click', (event)=>{
             tddtp.innerHTML = "-";
             tr.appendChild(tddtp);
 
+            const tdtg = document.createElement("td");
+            tdtg.innerHTML = "-";
+            tr.appendChild(tdtg);            
+
             const tdtmp = document.createElement("td");
             tdtmp.innerHTML = "-";
             tr.appendChild(tdtmp);
+
+            const tdng = document.createElement("td");
+            tdng.className = "notes";
+            tdng.innerHTML = "-";
+            tr.appendChild(tdng);            
+
+            glTable.appendChild(tr);
         }  
     }      
 
  };
+
+ const tooltip = document.getElementById("noteTooltip");
+ document.addEventListener("click", e => {
+    const button = e.target.closest(".note-button");
+
+    if (!button) {
+        tooltip.style.display = "none";
+        return;
+    }
+
+    tooltip.textContent = button.dataset.note;
+
+    const rect = button.getBoundingClientRect();
+
+    tooltip.style.left = `${rect.left - 280 + window.scrollX}px`;
+    tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+    tooltip.style.display = "block";
+});
+
+function show_history(modal){
+    location.href = `history.html?type=${modal}`;
+};
+

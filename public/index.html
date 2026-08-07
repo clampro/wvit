@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="/config.js"></script>
     <script src="scripts/index.js" defer></script>
-    <title>Document</title>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <title>Vitals Watch</title>
 </head>
 <body onload="init()">
     <h1>Νέα Μέτρηση</h1>
@@ -38,31 +39,10 @@
                     <th>Μεγάλη</th>
                     <th>Μικρή</th>
                     <th>Παλμοί</th>
+                    <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
                 </tr>
             </thead>
-            <tbody id="lbpTable">
-                <tr>
-                    <td>2026-07-25</td>
-                    <td>16:00:00</td>
-                    <td>110</td>
-                    <td>78</td>
-                    <td>75</td>
-                </tr>
-                <tr>
-                    <td>2026-07-24</td>
-                    <td>17:00:00</td>
-                    <td>112</td>
-                    <td>79</td>
-                    <td>87</td>
-                </tr> 
-                <tr>
-                    <td>2026-07-23</td>
-                    <td>17:12:00</td>
-                    <td>110</td>
-                    <td>75</td>
-                    <td>81</td>
-                </tr>                            
-            </tbody>
+            <tbody id="lbpTable"></tbody>
         </table>
     </div>
 
@@ -74,26 +54,12 @@
                 <tr>
                     <th>Ημερομηνία</th>
                     <th>Ώρα</th>
-                    <th>Γλυκόζη</th>
+                    <th>Τύπος</th>
+                    <th>Γλυκόζη  (mg/dL)</th>
+                    <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
                 </tr>
             </thead>
-            <tbody id="lglTable">
-                <tr>
-                    <td>2026-07-25</td>
-                    <td>16:00:00</td>
-                    <td>120</td>
-                </tr>
-                <tr>
-                    <td>2026-07-24</td>
-                    <td>18:00:00</td>
-                    <td>86</td>
-                </tr>            
-                <tr>
-                    <td>2026-07-23</td>
-                    <td>19:00:00</td>
-                    <td>88</td>
-                </tr>                            
-            </tbody>
+            <tbody id="lglTable"></tbody>
         </table>
     </div>
     
@@ -134,6 +100,8 @@
             </div>
         </div>
     </div>
+
+    <div id="noteTooltip" class="note-tooltip"></div>
     
     <!---Modal Window for Glucose Reading-->
     <div class="modal-gl" id="modal-gl"> 
@@ -149,8 +117,18 @@
                     <label for="newGLTime">Ώρα</label>
                     <input type="time" id="newGLTime" class="input" name="newGLTime">
                 </div>
+                <div class="glTypes">
+                    <div>
+                        <input type="radio" name="glTypes" id="fasting" class="radio" value="fasting">
+                        <label for="fasting">Νηστείας</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="glTypes" id="postMeal" class="radio" value="postMeal">
+                        <label for="postMeal">Μεταγευματική</label>
+                    </div>
+                </div>
                 <div class="glReadings">
-                    <label for="glucose">Γλυκόζη</label>
+                    <label for="glucose">Γλυκόζη (mg/dL)</label>
                     <input type="number" id="glucose" class="input" name="glucose" min="10" max="300">
                     <label for="notesGL">Σημειώσεις</label>
                     <textarea name="notesGL" id="notesGL" class="input"></textarea>
@@ -164,10 +142,10 @@
     
     <footer>
         <div id="measureHist" class="measureHist">
-            <button type="submit" id="pressure" class="measureBTN">
+            <button type="submit" id="pressureHistBTN" class="measureBTN">
                 <img src="assets/pressure-hist.png" alt="Blood pressure">
             </button>
-            <button type="submit" id="glucose" class="measureBTN">
+            <button type="submit" id="glucoseHistBTN" class="measureBTN">
              <img src="assets/glucose-hist.png" alt="Glucose">
             </button>
         </div>        

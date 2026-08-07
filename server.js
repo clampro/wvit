@@ -10,35 +10,37 @@ import Database              from 'better-sqlite3';
 //                  CREATE THE DATABASE IF IT DOES NOT EXIST                    //
 //------------------------------------------------------------------------------//
 // Create a connection to the database
-console.log(process.env.DATABASE_LOCATION);
 const db = new Database(process.env.DATABASE_LOCATION);
 db.pragma('journal_mode = WAL');
 
 //Create the Blood Pressure Table
 db.exec(`
-  CREATE TABLE IF NOT EXISTS blood_pressure(
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+  CREATE TABLE IF NOT EXISTS blood_pressure (
+    id INTEGER PRIMARY KEY,
+    measured_at TEXT NOT NULL,
     systolic INTEGER NOT NULL,
     diastolic INTEGER NOT NULL,
     pulses INTEGER NOT NULL,
-    measured_at TEXT NOT NULL
+    notes TEXT
   )
 `);
 
 //Create the Glucose Table
 db.exec(`
-  CREATE TABLE IF NOT EXISTS glucose(
-    id INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT,
+  CREATE TABLE IF NOT EXISTS glucose (
+    id INTEGER PRIMARY KEY,
+    measured_at TEXT NOT NULL,
+    type TEXT NOT NULL,
     glucose INTEGER NOT NULL,
-    measured_at TEXT NOT NULL
+    notes TEXT
   )  
 `);
 
 //------------------------------------------------------------------------------//
 //                  PREPARE DB QUERIES                                          //
 //------------------------------------------------------------------------------//
-const insertIntoBloodPressure = db.prepare('INSERT INTO blood_pressure (systolic, diastolic, pulses, measured_at) VALUES (?,?,?,?,)');
-const insertIntoGlucose       = db.prepare('INSERT INTO glucose (glucose, measured_at) VALUES (?,?,)');
+const insertIntoBloodPressure = db.prepare('INSERT INTO blood_pressure (measured_at,systolic, diastolic, pulses, notes) VALUES (?,?,?,?,?)');
+const insertIntoGlucose       = db.prepare('INSERT INTO glucose (measured_at, type, glucose, notes) VALUES (?,?,?,?)');
 
 //------------------------------------------------------------------------------//
 //                  SETUP APP & ENDOINTS                                        //
@@ -62,6 +64,7 @@ app.get('/config.js', (req, res) => {
  });
 
 app.post("/insert", async(request, response,)=>{
+
   const table = request.query.type;
 
   try{
@@ -69,18 +72,21 @@ app.post("/insert", async(request, response,)=>{
     switch(table){
       case "bloodpressure":
 
-        const newBP = insertIntoBloodPressure.run( request.body.systolic,
+        const newBP = insertIntoBloodPressure.run( request.body.measured_at,
+                                                   request.body.systolic,
                                                    request.body.diastolic,
                                                    request.body.pulses,
-                                                   request.body.measured_at
+                                                   request.body.notes
 
         );
         response.status(200).json({success: 'Added BP measurement'});
         break;
       case "glucose":
         
-        const newGL = insertIntoGlucose.run( request.body.glucose,
-                                             request.body.measured_at
+        const newGL = insertIntoGlucose.run( request.body.measured_at, 
+                                             request.body.type,
+                                             request.body.glucose,
+                                             request.body.notes                                             
         );
         response.status(200).json({success: 'Added GL measurement'});
         break;
