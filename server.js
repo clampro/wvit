@@ -100,32 +100,43 @@ app.post("/insert", async(request, response,)=>{
 
 app.get("/measurements", async(request, response,)=>{
 
-  const limit = request.query.limit ? parseInt(request.query.limit) : null;
-  const table = request.query.type;
+  const { type, start, end, limit } = request.query;
 
   let results;
+  
+  const table = type == 'bloodpressure' ? "blood_pressure" : "glucose";
+  let sql = `
+              SELECT * FROM ${table}
+            `
 
-  const sqlBP = limit
-    ? 'SELECT * FROM blood_pressure ORDER BY measured_at DESC LIMIT ?'
-    : 'SELECT * FROM blood_pressure ORDER BY measured_at DESC';
+  const conditions = [];
+  const params = [];
+  
+  if (start){
+    conditions.push("measured_at >= ?");
+    params.push(start);
+  }
 
-  const sqlGL = limit
-    ? 'SELECT * FROM glucose ORDER BY measured_at DESC LIMIT ?'
-    : 'SELECT * FROM glucose ORDER BY measured_at DESC';    
+  if (end){
+    conditions.push("measured_at <= ?");
+    params.push(end);
+  }
+
+  if (conditions.length > 0){
+    sql += "WHERE " + conditions.join(" AND ");
+  }
+
+  sql += " ORDER BY measured_at DESC";
+
+  if (limit){
+    sql += " LIMIT ?";
+    params.push(Number(limit));
+  }
+
+  const statement = db.prepare(sql);
 
   try{
-    switch(table){
-      case "bloodpressure":
-        
-        const statementBP = db.prepare(sqlBP);
-        results = limit ? statementBP.all(limit) : statementBP.all();
-        break;
-      case "glucose":
-
-        const statementGL = db.prepare(sqlGL);
-        results = limit ? statementGL.all(limit) : statementGL.all();
-        break;
-    }
+    const results = statement.all(...params);
     //Send back results as JSON
     response.json(results);
 
