@@ -5,13 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.bunny.net/css?family=Roboto">
     <link rel="stylesheet" href="style.css">    
+    <script src="scripts/common.js" defer></script>
     <script src="scripts/history.js" defer></script>
     <link rel="icon" type="image/png" href="favicon.png" />    
     <title>Document</title>
 </head>
 <body onload="init()">
 
-    <div class="tableDiv"></div>
-    
+    <div id="noteTooltip" class="note-tooltip"></div>
+
+    <div class="history-container">
+        <div class="history-header" id="history-header">
+            <div><h1 id="histHDTitle"></h1></div>
+            <div class="history-subhd">
+                <label for="startDate"><h1>από</h1></label>
+                <input type="date" value="" id="startDate" class="input" name="startDate">
+                <label for="endDate"><h1>εώς</h1></label>
+                <input type="date" value="" id="endDate" class="input" name="endDate"> 
+                <button id="histRefresh" class="histRefresh">
+                    <img src="assets/refresh.png" alt="refresh Button">
+                </button>
+            </div>
+        </div>
+        <hr>
+        <div class="history-table" id="history-table"></div>
+        <div class="history-footer" id="history-footer">
+            <button id="home" class="footerBTN">
+                <img src="assets/home.png" alt="Return to Home Page">
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>

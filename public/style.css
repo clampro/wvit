@@ -67,6 +67,27 @@ hr {
     background-color: var(--button-hover);
 }
 
+.histRefresh {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;    
+    background-color: var(--primary-button);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition-duration: 0.4s;  
+}
+
+.histRefresh img {
+    width: 24px;
+    height: 24px;
+    padding: 8px;
+}
+
+.histRefresh:hover {
+    background-color: var(--button-hover);
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -84,7 +105,7 @@ tr:nth-child(even) {
   background-color: var(--dividers);
 }
 
-.notes, .noteshd{
+.notes, .noteshd, .trash, .trashhd{
   text-align: center;
 }
 
@@ -100,7 +121,7 @@ tr:nth-child(even) {
     z-index: 1000;
 }
 
-.note-button{
+.note-button, .trash-button{
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -216,3 +237,66 @@ tr:nth-child(even) {
 .addNew:hover{
   background-color: var(--button-hover);
 }   
+
+.history-container{
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;  
+}
+
+.history-header{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-subhd{
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-table{
+  flex: 1;
+}
+
+.history-footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  box-sizing: border-box;
+  z-index: 100;  
+}
+
+.footerBTN {
+    width: 20vmax;
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    background-color: var(--primary-button);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition-duration: 0.4s;
+}
+
+.footerBTN img {
+    width: 64px;
+    height: 64px;
+    padding: 8px;
+}
+
+.footerBTN:hover {
+    background-color: var(--button-hover);
+}

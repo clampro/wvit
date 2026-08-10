@@ -132,7 +132,7 @@ app.get("/measurements", async(request, response,)=>{
     sql += " LIMIT ?";
     params.push(Number(limit));
   }
-
+  
   const statement = db.prepare(sql);
 
   try{
@@ -143,6 +143,29 @@ app.get("/measurements", async(request, response,)=>{
   }catch(err){
     console.error(err);
     response.status(500).json({ error: 'Failed to read data'});
+  }
+
+});
+
+
+app.delete("/delete/:type/:id", (request, response, ) => {
+
+  const type = request.params.type;
+  const id = parseInt(request.params.id);
+  
+  const table = type == 'bloodpressure' ? "blood_pressure" : "glucose";  
+  
+  try{
+    const sql = db.prepare(`DELETE FROM ${table} WHERE id = ?`);
+    const result = sql.run(id);
+
+    if (result.changes === 0) {
+      return response.status(404).json({ error: 'Data not found' });
+    }    
+    response.sendStatus(204);
+  }catch (err){
+    console.error(err);
+    response.status(500).json({ error: 'Failed to delete data'});
   }
 
 });

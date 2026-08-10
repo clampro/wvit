@@ -22,7 +22,6 @@ const modalGlOverlay = document.getElementById("modal-gl");
 function showModalWindow(modalWindow){
 
     const today = new Date();
-    const isoDate = today.toISOString().split('T')[0];
     const localTime = today.toLocaleTimeString('el-GR', {hour12: false });
 
     const newBPDate = document.getElementById("newBPDate");
@@ -35,13 +34,13 @@ function showModalWindow(modalWindow){
     if (modalWindow == modals.BP){
         modalBpOverlay.style.display = 'flex'; 
         //Set Date and Time values
-        newBPDate.value = isoDate;
+        newBPDate.value = getLocalDate();
         newBPTime.value = localTime;
     }
     if (modalWindow == modals.GL){
          modalGlOverlay.style.display = 'flex';
          //Set Date and Time values
-         newGLDate.value = isoDate;
+         newGLDate.value = getLocalDate();
          newGLTime.value = localTime;
     }
     modalOpen = modalWindow;
@@ -425,23 +424,6 @@ modalGlOverlay.addEventListener('click', (event)=>{
 
  };
 
- const tooltip = document.getElementById("noteTooltip");
- document.addEventListener("click", e => {
-    const button = e.target.closest(".note-button");
-
-    if (!button) {
-        tooltip.style.display = "none";
-        return;
-    }
-
-    tooltip.textContent = button.dataset.note;
-
-    const rect = button.getBoundingClientRect();
-
-    tooltip.style.left = `${rect.left - 280 + window.scrollX}px`;
-    tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
-    tooltip.style.display = "block";
-});
 
 function show_history(modal){
     location.href = `history.html?type=${modal}`;
