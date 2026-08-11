@@ -3,8 +3,10 @@
 //------------------------------------------------------------------------------//
 import "dotenv/config";
 import express, { response } from "express";
-import cors                  from "cors";
+// import cors                  from "cors"; //Needs to be used in case front and back end are on different machines
 import Database              from 'better-sqlite3';
+import path                  from "path";
+import { fileURLToPath }     from "url";
 
 //------------------------------------------------------------------------------//
 //                  CREATE THE DATABASE IF IT DOES NOT EXIST                    //
@@ -47,9 +49,13 @@ const insertIntoGlucose       = db.prepare('INSERT INTO glucose (measured_at, ty
 //------------------------------------------------------------------------------//
 const app = express();
 
-app.use(cors());                  //Needs to change to be more secure
+// app.use(cors());                  //Needs to be used in case front and back end are on different machines
 app.use(express.json());  
-app.use(express.static("public"));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get('/config.js', (req, res) => {
     res.type('application/javascript');
