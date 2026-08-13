@@ -88,6 +88,25 @@ hr {
     background-color: var(--button-hover);
 }
 
+@media (max-width: 485px) {
+  .noteshd, .notes, .trashhd, .trash {
+    display: none;
+  }
+
+  .glucType {
+    max-width: 70px;
+    white-space:nowrap; 
+    overflow:hidden; 
+    text-overflow: ellipsis;    
+  }
+}
+
+.tableDiv{
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -216,12 +235,28 @@ tr:nth-child(even) {
   font-size: large;
 }
 
+
+
 .bpReadings, .glReadings{
   display: grid;
   grid-template-columns: 4fr 6fr;
   padding: 30px;
   gap: 12px;
   font-size: large;
+}
+
+@media (max-width: 485px) {
+  .bpDate, .glDate{
+    grid-template-columns: 1fr 1fr;
+    padding: 10px;
+  }
+  .modal-bp-body, .modal-gl-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;    
+  }
+
 }
 
 .addNew{
@@ -252,11 +287,41 @@ tr:nth-child(even) {
   justify-content: center;
 }
 
+
+#histHDTitle {
+    /* margin: 0 0 10px 0; */
+    margin: 0;
+}
+
 .history-subhd{
   display: flex;
   gap: 30px;
   align-items: center;
   justify-content: center;
+}
+
+.date-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-field label {
+    font-size: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .history-subhd{
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .date-field {
+      flex-direction: column;
+      gap: 3px;
+  }
+  .date-field label {
+      font-size: 1.2rem;
+  }  
 }
 
 .history-table{

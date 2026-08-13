@@ -16,12 +16,16 @@
 
     <div class="history-container">
         <div class="history-header" id="history-header">
-            <div><h1 id="histHDTitle"></h1></div>
+            <h1 id="histHDTitle"></h1>
             <div class="history-subhd">
-                <label for="startDate"><h1>από</h1></label>
-                <input type="date" value="" id="startDate" class="input" name="startDate">
-                <label for="endDate"><h1>εώς</h1></label>
-                <input type="date" value="" id="endDate" class="input" name="endDate"> 
+                <div class="date-field">
+                    <label for="startDate" class="lblStartDate"><h3>από</h3></label>
+                    <input type="date" value="" id="startDate" class="input" name="startDate">
+                </div>
+                <div class="date-field">
+                    <label for="endDate" class="lblEndDate"><h3>εώς</h3></label>
+                    <input type="date" value="" id="endDate" class="input" name="endDate"> 
+                </div>
                 <button id="histRefresh" class="histRefresh">
                     <img src="assets/refresh.png" alt="refresh Button">
                 </button>

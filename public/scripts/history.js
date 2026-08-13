@@ -12,6 +12,11 @@ const homeBTN    = document.getElementById("home");
 refreshBTN.addEventListener("click", () => refresh_measurements(historyType));
 homeBTN.addEventListener("click", ()=>return_home());
 
+//handle screen resizing
+const mobile = window.matchMedia("(max-width: 485px)");
+//window.addEventListener("load", handleScreenSize);
+mobile.addEventListener("change", handleScreenSize);
+
 document.addEventListener("click", e =>{
     const button = e.target.closest(".trash-button");
 
@@ -97,7 +102,20 @@ function render_historyBP(measurements){
     const table = document.createElement("table");
     const thead = document.createElement("thead");
 
-    thead.innerHTML = `
+    thead.id  = "bpTableHeader";
+    if(mobile.matches){
+        thead.innerHTML = `
+                        <tr>
+                            <th>Ημ/νία</th>
+                            <th>Ώρα</th>
+                            <th>Μεγ.</th>
+                            <th>Μικ.</th>
+                            <th>Παλ.</th>
+                            <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                        </tr>
+                      `;
+    }else{
+            thead.innerHTML = `
                         <tr>
                             <th>Ημερομηνία</th>
                             <th>Ώρα</th>
@@ -108,6 +126,7 @@ function render_historyBP(measurements){
                             <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
                         </tr>
                       `;
+    }
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
@@ -175,7 +194,6 @@ function render_historyBP(measurements){
         trashBTN.appendChild(trImg);
         trash.appendChild(trashBTN);
         tr.appendChild(trash);           
-
         tbody.appendChild(tr);        
     }
 
@@ -192,7 +210,19 @@ function render_historyGL(measurements){
 
     tableDiv.innerHTML = "";
 
-    thead.innerHTML = `
+    thead.id  = "glTableHeader";
+    if(mobile.matches){
+        thead.innerHTML = `
+                        <tr>
+                            <th>Ημ/νία</th>
+                            <th>Ώρα</th>
+                            <th>Τύπος</th>
+                            <th>Γλυκ.</th>
+                            <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                        </tr>
+                      `;
+    }else{
+        thead.innerHTML = `
                         <tr>
                             <th>Ημερομηνία</th>
                             <th>Ώρα</th>
@@ -202,6 +232,7 @@ function render_historyGL(measurements){
                             <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
                         </tr>
                       `;
+    }
     table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
@@ -230,7 +261,7 @@ function render_historyGL(measurements){
         const tdg = document.createElement("td");
         tdg.innerHTML = measurement.glucose;
         tr.appendChild(tdg);        
-
+        
         const tdng = document.createElement("td");
         tdng.className = "notes";
         if(notesExist){
@@ -261,17 +292,78 @@ function render_historyGL(measurements){
         trImg.width = "16";
         trImg.id = `trash-${measurement.id}`;
         
-
         trashBTN.appendChild(trImg);
         trash.appendChild(trashBTN);
         tr.appendChild(trash);
-        
-        tbody.appendChild(tr); 
+            
+        tbody.appendChild(tr);    
     }    
 
     table.appendChild(tbody);
 
     tableDiv.appendChild(table);    
+};
+
+function handleScreenSize(){
+    let headerID;
+    let headerHTML;
+    switch(historyType){
+        case modals.BP:
+            headerID = "bpTableHeader";
+            if(mobile.matches){
+                headerHTML = `
+                            <tr>
+                                <th>Ημ/νία</th>
+                                <th>Ώρα</th>
+                                <th>Μεγ.</th>
+                                <th>Μικ.</th>
+                                <th>Παλ.</th>
+                                <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                            </tr>
+                            `;
+            }else{
+            headerHTML = `
+                        <tr>
+                            <th>Ημερομηνία</th>
+                            <th>Ώρα</th>
+                            <th>Μεγάλη</th>
+                            <th>Μικρή</th>
+                            <th>Παλμοί</th>
+                            <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
+                            <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                        </tr>
+                        `;
+            }
+            break;
+        case modals.GL:
+            headerID = "glTableHeader";
+            if(mobile.matches){
+                headerHTML = `                
+                            <tr>
+                                <th>Ημ/νία</th>
+                                <th>Ώρα</th>
+                                <th>Τύπος</th>
+                                <th>Γλυκ.</th>
+                                <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                            </tr>
+                            `;
+            }else{
+                headerHTML = `
+                            <tr>
+                                <th>Ημερομηνία</th>
+                                <th>Ώρα</th>
+                                <th>Τύπος</th>
+                                <th>Γλυκόζη  (mg/dL)</th>
+                                <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
+                                <th class="trashhd"><img src="assets/trash.png" alt="Delete Record" width="16"></th>
+                             </tr>
+                             `;
+            }
+            break;
+    }
+    const tableHeader = document.getElementById(headerID);
+    tableHeader.innerHTML = headerHTML;
+    
 };
 
 function return_home(){

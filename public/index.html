@@ -24,9 +24,12 @@
     </div>
     <br>
     <hr>
-
+    <div class="statusMsg" id="statusMsg">
+        <p class="statusTXT" id="statusTXT">.</p>
+    </div>
+    <hr>
     <h1>Τελευταίες Μετρήσεις</h1>
-
+    <!-- <div id="viewport-debug"></div> -->
     <br>
 
     <h2>Πίεση</h2>
@@ -35,11 +38,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Ημερομηνία</th>
+                    <th class="dateHD">Ημερομηνία</th>
                     <th>Ώρα</th>
-                    <th>Μεγάλη</th>
-                    <th>Μικρή</th>
-                    <th>Παλμοί</th>
+                    <th class="systHD">Μεγάλη</th>
+                    <th class="diastHD">Μικρή</th>
+                    <th class="pulsHD">Παλμοί</th>
                     <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
                 </tr>
             </thead>
@@ -53,10 +56,10 @@
         <table>
             <thead>
                 <tr>
-                    <th>Ημερομηνία</th>
+                    <th class="dateHD">Ημερομηνία</th>
                     <th>Ώρα</th>
                     <th>Τύπος</th>
-                    <th>Γλυκόζη  (mg/dL)</th>
+                    <th class="glucHD">Γλυκόζη  (mg/dL)</th>
                     <th class="noteshd"><img src="assets/notes.png" alt="Notes Exist" width="16"></th>
                 </tr>
             </thead>
@@ -64,12 +67,6 @@
         </table>
     </div>
     
-    <br>
-    <hr>
-    <div class="statusMsg" id="statusMsg">
-        <p class="statusTXT" id="statusTXT">.</p>
-    </div>
-    <hr>
 
     <!---Modal Window for Blood Pressure Reading-->
     <div class="modal-bp" id="modal-bp">

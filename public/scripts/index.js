@@ -5,6 +5,8 @@ const modals = {
 
 const { max_systolic, max_diastolic, max_pulses, max_glucose } = window.APP_CONFIG;
 
+const mobile = window.matchMedia("(max-width: 485px)");
+
 let modalOpen;
 
 const openNewBP   = document.getElementById("pressureBTN");
@@ -97,6 +99,10 @@ GLaddNewBTN.addEventListener("click", () => addNewMeasurement(modals.GL));
 //Show History
 historyBP.addEventListener("click", ()=> show_history(modals.BP));
 historyGL.addEventListener("click", ()=> show_history(modals.GL));
+
+//handle screen resizing
+window.addEventListener("load", handleScreenSize);
+mobile.addEventListener("change", handleScreenSize);
 
 
 //Add New Measurement to Database
@@ -368,6 +374,7 @@ modalGlOverlay.addEventListener('click', (event)=>{
 
         const tdtg = document.createElement("td");
         tdtg.innerHTML = measurement.type;
+        tdtg.className = "glucType";
         tr.appendChild(tdtg);
 
         const tdg = document.createElement("td");
@@ -406,6 +413,7 @@ modalGlOverlay.addEventListener('click', (event)=>{
             tr.appendChild(tddtp);
 
             const tdtg = document.createElement("td");
+            tdtg.className = "glucType";
             tdtg.innerHTML = "-";
             tr.appendChild(tdtg);            
 
@@ -428,4 +436,55 @@ modalGlOverlay.addEventListener('click', (event)=>{
 function show_history(modal){
     location.href = `history.html?type=${modal}`;
 };
+
+ function handleScreenSize() {
+     const dateHeaders = document.getElementsByClassName("dateHD");
+     const systHeader  = document.getElementsByClassName("systHD");
+     const diastHeader = document.getElementsByClassName("diastHD");
+     const pulseHeader = document.getElementsByClassName("pulsHD");
+     const gluckHeader = document.getElementsByClassName("glucHD");
+     const gluckType   = document.getElementsByClassName("glucType"); 
+    
+     if (mobile.matches) {
+         // shorten column headers
+         for(let i = 0;i<dateHeaders.length;i++){
+             dateHeaders[i].innerHTML = 'Ημ/νία';
+         }
+         systHeader[0].innerHTML = 'Μεγ.';
+         diastHeader[0].innerHTML = 'Μικ.';
+         pulseHeader[0].innerHTML = 'Παλ.';
+         gluckHeader[0].innerHTML = 'Γλυκ.'
+
+
+
+     } else {
+         // lengthen column headers
+         for(let i = 0;i<dateHeaders.length;i++){
+             dateHeaders[i].innerHTML = 'Ημερομηνία';
+         }
+         systHeader[0].innerHTML = 'Μεγάλη';
+         diastHeader[0].innerHTML = 'Μικρή';
+         pulseHeader[0].innerHTML = 'Παλμοί';
+         gluckHeader[0].innerHTML = 'Γλυκόζη  (mg/dL)';
+     }
+ }
+
+// function showViewport() {
+//     document.getElementById('viewport-debug').textContent =
+
+//         `inner: ${window.innerWidth} × ${window.innerHeight}
+
+//          | client: ${document.documentElement.clientWidth} × ${document.documentElement.clientHeight}
+
+//          | screen: ${screen.width} × ${screen.height}
+
+//          | DPR: ${window.devicePixelRatio}
+
+//          | orientation: ${screen.orientation?.type}`;
+
+// }
+
+// showViewport();
+
+// window.addEventListener('resize', showViewport);
 
