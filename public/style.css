@@ -274,13 +274,15 @@ tr:nth-child(even) {
 }   
 
 .history-container{
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  margin: 0;  
+    height: 99vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    overflow: hidden; 
 }
 
 .history-header{
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -325,27 +327,22 @@ tr:nth-child(even) {
 }
 
 .history-table{
-  flex: 1;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .history-footer{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  flex-shrink: 0;
   display: flex;
   padding: 10px;
+  gap: 10px;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  box-sizing: border-box;
-  z-index: 100;  
 }
 
 .footerBTN {
-    width: 20vmax;
+    width: 10vmax;
     display: flex;
     justify-content: center;
     align-items: center;    
@@ -357,8 +354,8 @@ tr:nth-child(even) {
 }
 
 .footerBTN img {
-    width: 64px;
-    height: 64px;
+    width: 32px;
+    height: 32px;
     padding: 8px;
 }
 

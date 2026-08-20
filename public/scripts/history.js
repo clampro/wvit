@@ -8,9 +8,11 @@ let historyType;
 
 const refreshBTN = document.getElementById("histRefresh");
 const homeBTN    = document.getElementById("home");
+const pdfBTN     = document.getElementById("pdf");
 
 refreshBTN.addEventListener("click", () => refresh_measurements(historyType));
 homeBTN.addEventListener("click", ()=>return_home());
+pdfBTN.addEventListener("click", ()=> call_export());
 
 //handle screen resizing
 const mobile = window.matchMedia("(max-width: 485px)");
@@ -364,6 +366,23 @@ function handleScreenSize(){
     const tableHeader = document.getElementById(headerID);
     tableHeader.innerHTML = headerHTML;
     
+};
+
+function call_export(){
+
+    const start_date = document.getElementById("startDate");
+    const end_date   = document.getElementById("endDate");
+    
+    const start = start_date.value + ' 00:00:00';
+    const end   = end_date.value   + ' 23:59:59';
+    const type  = historyType;
+
+    const url =
+        `/measurements/pdf?type=${encodeURIComponent(type)}` +
+        `&start=${encodeURIComponent(start)}` +
+        `&end=${encodeURIComponent(end)}`;
+
+    window.location.href = url;
 };
 
 function return_home(){
