@@ -1,4 +1,4 @@
-# Mirareru
+# WVit
 
 A simple app to keep track of your blood pressure and glucose levels
 
